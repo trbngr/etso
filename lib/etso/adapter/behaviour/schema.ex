@@ -32,6 +32,7 @@ defmodule Etso.Adapter.Behaviour.Schema do
   def update(%{repo: repo}, %{schema: schema}, fields, filters, [], _) do
     {:ok, ets_table} = TableRegistry.get_table(repo, schema)
     [key_name] = schema.__schema__(:primary_key)
+     key_name =      schema.__schema__(:field_source, key_name)
     [{^key_name, key}] = filters
     ets_updates = build_ets_updates(schema, fields)
     ets_result = :ets.update_element(ets_table, key, ets_updates)
